@@ -12,12 +12,12 @@ using Windows.Devices.Enumeration;
 using Windows.Devices.Radios;
 using Windows.Storage.Streams;
 
-namespace XBatteryStatus
+namespace BatteryStatus
 {
     public class MyApplicationContext : ApplicationContext
     {
         private string version = "V1.2.1";
-        private string releaseUrl = @"https://github.com/tommaier123/XBatteryStatus/releases";
+        private string releaseUrl = @"https://github.com/ozcho/BatteryStatus/releases";
 
         NotifyIcon notifyIcon = new NotifyIcon();
         private ContextMenuStrip contextMenu;
@@ -26,7 +26,7 @@ namespace XBatteryStatus
 
         private Timer timer1;
 
-        public BluetoothLEDevice pairedGamepad;
+        public BluetoothLEDevice pairedDevice;
         public GattCharacteristic batteryCharacteristic;
         public Radio bluetoothRadio;
 
@@ -38,7 +38,7 @@ namespace XBatteryStatus
         {
             lightMode = IsLightMode();
             notifyIcon.Icon = GetIcon(Properties.Resources.iconQ);
-            notifyIcon.Text = "XBatteryStatus: Looking for paired controller";
+            notifyIcon.Text = "BatteryStatus: Looking for paired device";
             notifyIcon.Visible = true;
 
             contextMenu = new ContextMenuStrip();
@@ -74,8 +74,8 @@ namespace XBatteryStatus
 
             try
             {
-                Octokit.GitHubClient github = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("XBatteryStatus"));
-                var all = github.Repository.Release.GetAll("tommaier123", "XBatteryStatus").Result.Where(x => x.Prerelease == false).ToList();
+                Octokit.GitHubClient github = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("BatteryStatus"));
+                var all = github.Repository.Release.GetAll("ozcho", "BatteryStatus").Result.Where(x => x.Prerelease == false).ToList();
                 var latest = all.OrderByDescending(x => Int32.Parse(x.TagName.Substring(1).Replace(".", ""))).FirstOrDefault();
 
                 if (latest != null && Int32.Parse(version.Substring(1).Replace(".", "")) < Int32.Parse(latest.TagName.Substring(1).Replace(".", "")))
@@ -92,7 +92,7 @@ namespace XBatteryStatus
                         Properties.Settings.Default.Save();
 
                         new ToastContentBuilder()
-                        .AddText("XBatteryStatus")
+                        .AddText("BatteryStatus")
                         .AddText("New Version Available on GitHub")
                         .AddButton(new ToastButton()
                                 .SetContent("Download")
@@ -113,28 +113,29 @@ namespace XBatteryStatus
             if (bluetoothRadio?.State == RadioState.On)
             {
                 int count = 0;
-                foreach (var device in await DeviceInformation.FindAllAsync())
+                var devices = (await DeviceInformation.FindAllAsync())
+                    .Where(x => x.IsEnabled)
+                    .Where(x => x.Id.Contains("00805f9b34fb")).ToArray();
+                foreach (var device in devices)
                 {
                     try
                     {
                         BluetoothLEDevice bleDevice = await BluetoothLEDevice.FromIdAsync(device.Id);
 
-                        if (bleDevice?.Appearance.SubCategory == BluetoothLEAppearanceSubcategories.Gamepad)//get the gamepads
-                        {
-                            GattDeviceService service = bleDevice.GetGattService(new Guid("0000180f-0000-1000-8000-00805f9b34fb"));
-                            GattCharacteristic characteristic = service.GetCharacteristics(new Guid("00002a19-0000-1000-8000-00805f9b34fb")).First();
+                        GattDeviceService service = bleDevice.GetGattService(new Guid("0000180f-0000-1000-8000-00805f9b34fb"));
+                        GattCharacteristic characteristic = service.GetCharacteristics(new Guid("00002a19-0000-1000-8000-00805f9b34fb")).First();
 
-                            if (service != null && characteristic != null)//get the gamepads with battery status
+                        if (service != null && characteristic != null)//get the devices with battery status
+                        {
+                            bleDevice.ConnectionStatusChanged -= ConnectionStatusChanged;
+                            bleDevice.ConnectionStatusChanged += ConnectionStatusChanged;
+                            count++;
+                            if (bleDevice.ConnectionStatus == BluetoothConnectionStatus.Connected)
                             {
-                                bleDevice.ConnectionStatusChanged -= ConnectionStatusChanged;
-                                bleDevice.ConnectionStatusChanged += ConnectionStatusChanged;
-                                count++;
-                                if (bleDevice.ConnectionStatus == BluetoothConnectionStatus.Connected)
-                                {
-                                    ConnectGamepad(bleDevice);
-                                }
+                                ConnectDevice(bleDevice);
                             }
                         }
+                       
                     }
                     catch { }
                 }
@@ -142,7 +143,7 @@ namespace XBatteryStatus
                 if (count == 0)
                 {
                     notifyIcon.Icon = GetIcon(Properties.Resources.iconE);
-                    notifyIcon.Text = "XBatteryStatus: No paired controller with battery service found";
+                    notifyIcon.Text = "BatteryStatus: No paired device with battery service found";
                 }
                 else
                 {
@@ -152,7 +153,7 @@ namespace XBatteryStatus
             else
             {
                 notifyIcon.Icon = GetIcon(Properties.Resources.iconE);
-                notifyIcon.Text = "XBatteryStatus: Bluetooth is turned off";
+                notifyIcon.Text = "BatteryStatus: Bluetooth is turned off";
                 Update();
             }
         }
@@ -166,17 +167,17 @@ namespace XBatteryStatus
         {
             if (sender.ConnectionStatus == BluetoothConnectionStatus.Connected)
             {
-                ConnectGamepad(sender);
+                ConnectDevice(sender);
             }
-            else if (sender == pairedGamepad)
+            else if (sender == pairedDevice)
             {
                 Update();
             }
         }
 
-        public void ConnectGamepad(BluetoothLEDevice device)
+        public void ConnectDevice(BluetoothLEDevice device)
         {
-            if (pairedGamepad == null || pairedGamepad.ConnectionStatus == BluetoothConnectionStatus.Disconnected)
+            if (pairedDevice == null || pairedDevice.ConnectionStatus == BluetoothConnectionStatus.Disconnected)
             {
                 try
                 {
@@ -185,7 +186,7 @@ namespace XBatteryStatus
 
                     if (service != null && characteristic != null)
                     {
-                        pairedGamepad = device;
+                        pairedDevice = device;
                         batteryCharacteristic = characteristic;
                         Update();
                     }
@@ -201,7 +202,7 @@ namespace XBatteryStatus
 
         public void Update()
         {
-            bool enabled = bluetoothRadio?.State == RadioState.On && pairedGamepad?.ConnectionStatus == BluetoothConnectionStatus.Connected;
+            bool enabled = bluetoothRadio?.State == RadioState.On && pairedDevice?.ConnectionStatus == BluetoothConnectionStatus.Connected;
             notifyIcon.Visible = Properties.Settings.Default.hide ? enabled : true;
             if (enabled)
             {
@@ -211,7 +212,7 @@ namespace XBatteryStatus
 
         private async void ReadBattery()
         {
-            if (pairedGamepad?.ConnectionStatus == BluetoothConnectionStatus.Connected && batteryCharacteristic != null)
+            if (pairedDevice?.ConnectionStatus == BluetoothConnectionStatus.Connected && batteryCharacteristic != null)
             {
                 GattReadResult result = await batteryCharacteristic.ReadValueAsync();
 
@@ -219,8 +220,8 @@ namespace XBatteryStatus
                 {
                     var reader = DataReader.FromBuffer(result.Value);
                     int val = reader.ReadByte();
-                    string notify = val.ToString() + "% - " + pairedGamepad.Name;
-                    notifyIcon.Text = "XBatteryStatus: " + notify;
+                    string notify = val.ToString() + "% - " + pairedDevice.Name;
+                    notifyIcon.Text = "BatteryStatus: " + notify;
                     Icon icon = Properties.Resources.icon100;
                     if (val < 5) icon = Properties.Resources.icon00;
                     else if (val < 15) icon = Properties.Resources.icon10;

@@ -3,7 +3,7 @@
 "VSVersion" = "3:800"
 "ProjectType" = "8:{978C614F-708E-4E1A-B201-565925725DBA}"
 "IsWebType" = "8:FALSE"
-"ProjectName" = "8:XBatteryStatusInstaller"
+"ProjectName" = "8:BatteryStatusInstaller"
 "LanguageId" = "3:1033"
 "CodePage" = "3:1252"
 "UILanguageId" = "3:1033"
@@ -71,7 +71,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\XBatteryStatusInstaller.msi"
+        "OutputFilename" = "8:Release\\BatteryStatusInstaller.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -214,9 +214,9 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:XBatteryStatus"
+        "ProductName" = "8:BatteryStatus"
         "ProductCode" = "8:{7249399A-F04A-4775-87E6-233063CE5C94}"
-        "PackageCode" = "8:{54C35175-C8DD-416B-95F4-F12494698716}"
+        "PackageCode" = "8:{CBA2910C-E8B5-4905-87ED-9F1B457C89EC}"
         "UpgradeCode" = "8:{93DDDD01-E50C-43CA-B3CB-EDF95BCEE958}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
@@ -224,15 +224,15 @@
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
         "ProductVersion" = "8:1.2.1"
-        "Manufacturer" = "8:Nova_Max"
+        "Manufacturer" = "8:OzChO"
         "ARPHELPTELEPHONE" = "8:"
-        "ARPHELPLINK" = "8:https://github.com/tommaier123/XBatteryStatus"
-        "Title" = "8:XBatteryStatus"
+        "ARPHELPLINK" = "8:https://github.com/ozcho/BatteryStatus"
+        "Title" = "8:BatteryStatus"
         "Subject" = "8:"
-        "ARPCONTACT" = "8:Nova_Max"
+        "ARPCONTACT" = "8:OzChO"
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:"
-        "ARPURLINFOABOUT" = "8:https://github.com/tommaier123/XBatteryStatus"
+        "ARPURLINFOABOUT" = "8:https://github.com/ozcho/BatteryStatus"
         "ARPPRODUCTICON" = "8:_D3B16B81E2EF4E6AA74C24528735BCA3"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
@@ -338,7 +338,7 @@
         {
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_AAE5F8DDAC104A1C83DDB81BDEADFC1F"
             {
-            "Name" = "8:XBatteryStatus"
+            "Name" = "8:BatteryStatus"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
@@ -352,7 +352,7 @@
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_D5A52AB781F84D0A8B602E9DEBDA1CA2"
             {
-            "Name" = "8:XBatteryStatus"
+            "Name" = "8:BatteryStatus"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
@@ -383,7 +383,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_04A0F6ECB2A042E2A46E59EB2420ECA4"
                     {
                     "Sequence" = "3:300"
-                    "DisplayName" = "8:Confirm Installation"
+                    "DisplayName" = "8:Confirmar instalación"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdAdminConfirmDlg.wid"
@@ -405,7 +405,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_1CE17124F01A4A0C9AAAA4BCC963A780"
                     {
                     "Sequence" = "3:200"
-                    "DisplayName" = "8:Installation Folder"
+                    "DisplayName" = "8:Carpeta de instalación"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdAdminFolderDlg.wid"
@@ -427,7 +427,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_81890F608CF04421A5A3F02015758190"
                     {
                     "Sequence" = "3:100"
-                    "DisplayName" = "8:Welcome"
+                    "DisplayName" = "8:Pantalla de bienvenida"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdAdminWelcomeDlg.wid"
@@ -484,7 +484,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_D6B9A294F8814B0BB8699557864943AE"
                     {
                     "Sequence" = "3:200"
-                    "DisplayName" = "8:Installation Folder"
+                    "DisplayName" = "8:Carpeta de instalación"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdFolderDlg.wid"
@@ -519,7 +519,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_D9842C8D97F945C68FC42B9E8B9B9E25"
                     {
                     "Sequence" = "3:300"
-                    "DisplayName" = "8:Confirm Installation"
+                    "DisplayName" = "8:Confirmar instalación"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdConfirmDlg.wid"
@@ -541,7 +541,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_DD888378F58C4828856D8B0A185DE17D"
                     {
                     "Sequence" = "3:100"
-                    "DisplayName" = "8:Welcome"
+                    "DisplayName" = "8:Pantalla de bienvenida"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdWelcomeDlg.wid"
@@ -598,7 +598,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_4073938A8BDB4F3F8491F50568556B2C"
                     {
                     "Sequence" = "3:100"
-                    "DisplayName" = "8:Progress"
+                    "DisplayName" = "8:Progreso"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdAdminProgressDlg.wid"
@@ -642,7 +642,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_885617902E55410BB7795476BD92235E"
                     {
                     "Sequence" = "3:100"
-                    "DisplayName" = "8:Progress"
+                    "DisplayName" = "8:Progreso"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdProgressDlg.wid"
@@ -692,7 +692,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_CDD659A3291C427AB2A9B68B8DD7F534"
                     {
                     "Sequence" = "3:100"
-                    "DisplayName" = "8:Finished"
+                    "DisplayName" = "8:Finalizado"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdAdminFinishedDlg.wid"
@@ -723,7 +723,7 @@
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_FAD0588A22AD4E9AAC6F8D2404AF52C1"
                     {
                     "Sequence" = "3:100"
-                    "DisplayName" = "8:Finished"
+                    "DisplayName" = "8:Finalizado"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"
                     "SourcePath" = "8:<VsdDialogDir>\\VsdFinishedDlg.wid"

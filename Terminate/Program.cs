@@ -6,7 +6,7 @@ namespace Terminate
     {
         static void Main(string[] args)
         {
-            Process[] processes = Process.GetProcessesByName("XBatteryStatus");
+            Process[] processes = Process.GetProcessesByName("BatteryStatus");
 
             foreach (var process in processes)
             {
